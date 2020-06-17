@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h1 class="mt-4">Création d'un article</h1>
+ 
+        {{ form_start(formArticle) }}
+        {# alternative form_widget(formArticle) #}
+        {{ form_row(formArticle.title, {'attr': {'placeholder': "Titre de l'article"}}) }}
+        {{ form_row(formArticle.content, {'attr': {'placeholder' : "Contenu de l'article"}}) }}
+        {{ form_row(formArticle.allergen, {'attr': {'placeholder' : "Liste des allergènes en mode texte..."}}) }}
+        {{ form_row(formArticle.category) }}
+        {{ form_row(formArticle.price, {'attr': {'placeholder' : "Renseigner le prix..."}}) }}
+
+        <button type="submit" class="btn btn-success">
+            {% if editMode %}
+            Enregistrer
+            {% else %}
+            Ajouter l'article
+            {% endif %}
+        </button>
+        {{ form_end(formArticle) }}
+
+    
+{% endblock %}

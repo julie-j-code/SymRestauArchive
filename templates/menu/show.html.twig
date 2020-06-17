@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<article>
+    <h2 class="mt-4">{{ menu.title }}</h2>
+    <div class="metadata">Menu ajouté le {{menu.createdAt | date ('d,m,Y')}}. Id : {{menu.id}}</div>
+    <div class="content">
+        <img src="{{ menu.image }}" alt="">
+           {% for item in menu.articles %}      
+     <h6 class="card-subtitle mb-2 text-muted mt-4">{{item.title}}</h6>
+    {% endfor %}
+    </div>
+</article>
+{% endblock %}

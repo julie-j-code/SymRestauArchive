@@ -2,11 +2,12 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Menu;
+use App\Entity\Article;
+use App\Entity\Comment;
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use App\Entity\Article;
-use App\Entity\Category;
-use App\Entity\Comment;
 
 class ArticleFixtures extends Fixture
 {
@@ -15,28 +16,56 @@ class ArticleFixtures extends Fixture
         //j'appelle dans l'espace de nom faker la classe factory qui a une methode static create qui fournit une instance de la classe faker
         $faker=\Faker\Factory::create('fr_FR');
 
-        //créer 3 catégories fakées
-        for($i=1; $i<=3; $i++){
-            //je crée une instance de la classe catégorie, et donc j'utilise le use plus haut pour indiquer sa provenance App\Entity\Caterogy
+        // Pour générer des catégories simples pour les items (articles) du menu
+    
+       for($h=1; $h<6; $h++){
             $category=new Category();
-            $category->setTitle($faker->sentence());
-            $category->setDescription($faker->paragraph());
+              $category->setName($faker->word(6));
+
+            $manager->persist($category);          
+
+
+        //créer des menus fakés ... trop nombreux. PB Mais c'est du Fake !
+        $menu = [];
+        for($i=0; $i<=1; $i++){
+
+            $menu[$i]=new Menu();
+            $menu[$i]->setTitle($faker->sentence())
+                ->setImage($faker->imageUrl())
+                ->setCreatedAt($faker->dateTimeBetween('-6 months'))
+                ->setEndDate($faker->DateTime('2021-05-29 22:30:48', 'Europe/Paris'))
+                ->setPrice($faker->randomFloat($nbMaxDecimals = NULL, $min = 30, $max = 90));
                      
-                     $manager->persist($category);
+                     $manager->persist($menu[$i]);
+
+        }
 
                      // créer entre 4 et 6 articles
 
-                     for( $j=1; $j<= mt_rand(4,6); $j++) {
-                        $article=new Article();
+                     $article = [];
+                     for( $j=0; $j<= mt_rand(4,6); $j++) {
+
+                        $article[$j]=new Article();
+
                         $content='<p>'.join($faker->paragraphs(5), '</p><p>').'</p>';
 
-                        $article->setTitle($faker->sentence())
+                        $article[$j]->setTitle($faker->sentence())
                                 ->setContent($content)
-                                ->setImage($faker->imageUrl())
                                 ->setCreatedAt($faker->dateTimeBetween('-6 months'))
+                                ->setPrice($faker->randomFloat($nbMaxDecimals = NULL, $min = 8, $max = 25))
+                                ->setAllergen($faker->sentence())
                                 ->setCategory($category);
-            
-                                $manager->persist($article);
+                                //->addMenu($menu);
+
+                        // on récupère un nombre aléatoire de menu dans un tableau
+                        $randomMenu = (array) array_rand($menu, rand(1, count($menu)));
+                        // puis on y rattache des articles
+                        foreach ($randomMenu as $key => $value) {
+                            $article[$j]->addMenu($menu[$key]);
+                        }
+          
+                                $manager->persist($article[$j]);
+
 
                         //créer des commentaires par article
 
@@ -44,20 +73,22 @@ class ArticleFixtures extends Fixture
                             $comment=new Comment();
                             $content='<p>'.join($faker->paragraphs(5), '</p><p>').'</p>';
                             $now=new\ DateTime();
-                            $interval=$now->diff($article->getCreatedAt());
+                            $interval=$now->diff($article[$j]->getCreatedAt());
                             $days=$interval->days;
                             $min='-'.$days.'days';
 
                             $comment->setAuthor($faker->name())
                                     ->setContent($content)
                                     ->setCreatedAt($faker->dateTimeBetween($min))
-                                    ->setArticle($article);
+                                    ->setArticle($article[$j]);
                             
                                     $manager->persist($comment);       
 
                         }
     }
+
 }
+
 
 $manager->flush();
 }}

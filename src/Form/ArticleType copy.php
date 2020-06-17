@@ -15,15 +15,21 @@ class ArticleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('title')
-        //attention, category est une relation...
-        ->add('category', EntityType::class, [
-            'class'=> Category::class,
-            'choice_label'=> 'name'
-        ])
+            ->add('title')
+            //attention, Menu est une relation...
+            ->add('Menu', EntityType::class, [
+                'class'=> Menu::class,
+                'choice_label'=> 'title'
+            ])
+            //attention, Category est une relation...
+            ->add('Category', EntityType::class, [
+                'class'=> Category::class,
+                'choice_label' => function(?Category $category) {
+                    return $category ? strtoupper($category->getName()) : [];
+                }
+            ])
             ->add('content')
             ->add('allergen')
-            ->add('price')
            // ->add('createdAt')
         ;
     }

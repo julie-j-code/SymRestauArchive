@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Parcourir nos catégories!{% endblock %}
+
+{% block body %}
+<section class="articles">
+    {% for article in articles %}
+    <article>
+        <h2>{{article.title}}</h2>
+        {% if  article.category %}
+        <span class="badge badge-primary">Element à la carte dans catégorie {{article.category}}</span>            
+        {% endif %}
+        <div class="content">
+            {{article.content | raw}}
+            {% if  article.category %}
+            <a href="{{path('article_category',{'id':article.categories})}}" class="btn btn-primary">Tous les items de {{article.categories}} </a>
+            {% endif %}
+        </div>
+    </article> 
+
+    {% endfor %}
+
+
+</section>
+{% endblock %}

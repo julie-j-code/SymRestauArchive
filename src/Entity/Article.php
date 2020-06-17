@@ -32,10 +32,20 @@ class Article
     private $content;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @assert\Url()
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article", orphanRemoval=true)
      */
-    private $image;
+    private $comments;
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $allergen;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price;
 
     /**
      * @ORM\Column(type="datetime")
@@ -43,19 +53,22 @@ class Article
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Menu", inversedBy="articles")
+     */
+    private $menu;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles", cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article", orphanRemoval=true)
-     */
-    private $comments;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->menu = new ArrayCollection();
+
     }
 
    
@@ -88,41 +101,7 @@ class Article
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
 
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Comment[]
@@ -154,6 +133,85 @@ class Article
 
         return $this;
     }
+
+
+    public function getAllergen(): ?string
+    {
+        return $this->allergen;
+    }
+
+    public function setAllergen(?string $allergen): self
+    {
+        $this->allergen = $allergen;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Menu[]
+     */
+    public function getMenu(): Collection
+    {
+        return $this->menu;
+    }
+
+    public function addMenu(Menu $menu): self
+    {
+        if (!$this->menu->contains($menu)) {
+            $this->menu[] = $menu;
+        }
+
+        return $this;
+    }
+
+    public function removeMenu(Menu $menu): self
+    {
+        if ($this->menu->contains($menu)) {
+            $this->menu->removeElement($menu);
+        }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+
+
+
 
 
 

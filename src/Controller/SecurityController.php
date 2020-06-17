@@ -16,8 +16,7 @@ class SecurityController extends AbstractController
      * @Route("/inscription", name="security_registration")
      */
 
-     //on va passer en paramètre un objet request du type de la classe request
-     //on a aussi besoin que synfony utiliser une classe conçue pour encoder les mots de passe utilisateur
+     //classe conçue pour encoder les mots de passe utilisateur
     public function registration(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
     {
         $user=new User;
@@ -42,11 +41,11 @@ class SecurityController extends AbstractController
      */
     public function login(){
         return $this->render('security/login.html.twig');
-
     }
 
     /**
-     * @Route ("/deconnexion", name="security_logout")
+     * @Route ("/logout", name="logout")
+     * @return void
      */
      public function logout(){}
     }

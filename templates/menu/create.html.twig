@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% form_theme formMenu 'bootstrap_4_layout.html.twig' %}
+
+
+{% block body %}
+    <h1 class="mt-4">Création d'un Menu</h1>
+
+        {{ form_start(formMenu) }}
+        {{ form_row(formMenu.title, {'attr': {'placeholder': "Titre du Menu" },'label': 'Nom du menu'}) }}
+        {{ form_row(formMenu.price, {'attr': {'placeholder' : "Renseigner le prix..."}, 'label': 'Prix (€)'}) }}
+        {{ form_row(formMenu.image, {'attr': {'placeholder' : "Url de l'image", 'label': 'Image'}}) }}
+        {# je ne savais pas comment m'y prendre pour activer option select multiple c'était pourtant simple !!! #}
+        {{ form_row(formMenu.articles, {'attr': {'multiple' : 'true'}}, { 'label': 'Articles au menu'}) }}
+        {{ form_row(formMenu.createdAt, { 'label': 'Date de création'}) }}
+        {{ form_row(formMenu.endDate, { 'label': 'Fin de publication'}) }}
+        <button type="submit" class="btn btn-success">
+            {% if editMode %}
+            Enregistrer
+            {% else %}
+            Ajouter le Menu
+            {% endif %}
+        </button>
+        {{ form_end(formMenu) }}
+
+    
+{% endblock %}

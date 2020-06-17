@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BlogController!{% endblock %}
+
+{% block body %}
+<section class="articles">
+    {% for article in articles %}
+    <article>
+        <h2 class="mt-4">{{article.title}}</h2>
+        {% if  article.category %}
+        <span class="badge badge-primary mt-3 mb-4">Element de la carte dans catégorie {{article.category.name |upper}}</span>            
+        {% endif %}
+        <div class="content">
+            {{article.content | raw}}
+            <span class="badge badge-info mb-4">{{article.price}}€</span>
+
+            {# {% if  article.category %}
+            <a href="{{path('articles_category',{'id':article.category})}}" class="btn btn-primary">Tous les items de {{article.category}} </a>
+            {% endif %} #}
+        </div>
+        <div>        
+            {% if  app.user %}
+                <a href="{{ path('article_edit', {'id':article.id })}}" class="card-link">Modifier</a>
+                <a href="{{ path('article_delete', {'id':article.id })}}" class="card-link">Supprimer</a>
+            {% endif %}
+        </div>
+        
+    </article> 
+
+    {% endfor %}
+
+
+</section>
+{% endblock %}

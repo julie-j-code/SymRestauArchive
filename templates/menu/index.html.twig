@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Menus!{% endblock %}
+
+
+{% block body %}
+
+<h2 class="mt-4">Liste de nos menus</h2>
+<section class="row">
+ {% for menu in menus %}
+
+ <div class="card border-light mb-3" style="max-width: 20rem;">
+  <div class="card-header">Crée le {{menu.createdAt | date("m/d/Y")}} </div>
+  <div class="card-body">
+    <h3 class="card-title">{{menu.title}}</h3>    
+    <img style="height: 200px; width: 100%; display: block;" src="{{menu.image}}" alt="Card image">
+     
+  {% if menu.articles %}
+    <h4 class="card-subtitle mb-2 text-muted mt-3">Elements du menu</h4>
+  {% endif %}
+  {% for item in menu.articles %}          
+     <p class="card-text">{{item.title}}</p>
+  {% endfor %}
+  {% if  app.user %}
+      <a href="{{ path('menu_edit', {'id':menu.id })}}" class="card-link">Modifier</a>
+      <a href="{{ path('menu_delete', {'id':menu.id })}}" class="card-link">Supprimer</a>
+  {% endif %}
+  <div class="card-footer text-muted mt-4">{{menu.price}}€ </div>
+              
+  </div>
+</div>
+
+
+  {% endfor %}
+
+</section>
+{% endblock %}
