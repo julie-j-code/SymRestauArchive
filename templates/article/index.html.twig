@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BlogController!{% endblock %}
+{% block title %}Nos articles à la carte{% endblock %}
 
 {% block body %}
 <section class="articles">
+
     {% for article in articles %}
+    
     <article>
         <h2 class="mt-4">{{article.title}}</h2>
         {% if  article.category %}
