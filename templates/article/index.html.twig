@@ -3,34 +3,50 @@
 {% block title %}Nos articles à la carte{% endblock %}
 
 {% block body %}
-<section class="articles">
+<section>
 
-    {% for article in articles %}
-    
-    <article>
-        <h2 class="mt-4">{{article.title}}</h2>
-        {% if  article.category %}
-        <span class="badge badge-primary mt-3 mb-4">Element de la carte dans catégorie {{article.category.name |upper}}</span>            
-        {% endif %}
+<h2 class="mt-4">Articles à la Carte</h1>
+<hr>
+<legend>Naviguez par catégories...</legend>
+
+{#Onglets de naviagation#}
+<ul class="nav nav-tabs mt-4">
+{% for category in categories %}
+  <li class="nav-item">
+    <h3 style="font-size: 1rem;" >
+        <a class="nav-link {% if loop.first %}active{% endif %}" data-toggle="tab" href="#{{category.name}}">
+            {{category.name | upper}}
+        </a>
+    </h3>
+  </li>  
+{% endfor %}
+</ul>
+{#contenu#}
+<div id="myTabContent" class="tab-content">
+{% for category in categories %}
+  <div class="tab-pane fade show {% if loop.first %}active {% endif %}" id="{{category.name}}"> 
+  {% for article in articles %}  
+  {% if article.category.name is same as(category.name) %}      
+   
+        <h4 class="my-4">{{article.title}}</h4>
+        <p>{{article.category.name}}</p>
         <div class="content">
             {{article.content | raw}}
+            <div class="alert alert-dismissible alert-warning">Allergènes : {{article.allergen}}</div>
             <span class="badge badge-info mb-4">{{article.price}}€</span>
-
-            {# {% if  article.category %}
-            <a href="{{path('articles_category',{'id':article.category})}}" class="btn btn-primary">Tous les items de {{article.category}} </a>
-            {% endif %} #}
         </div>
-        <div>        
             {% if  app.user %}
+        <div>        
                 <a href="{{ path('article_edit', {'id':article.id })}}" class="card-link">Modifier</a>
                 <a href="{{ path('article_delete', {'id':article.id })}}" class="card-link">Supprimer</a>
+        </div>    
             {% endif %}
-        </div>
-        
-    </article> 
 
-    {% endfor %}
-
+    {% endif %}   
+    {% endfor %}   
+   </div>
+{% endfor %}
+</div>
 
 </section>
 {% endblock %}

@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Entity\Category;
 use App\Entity\Comment;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,13 +23,15 @@ class ArticleController extends AbstractController
      * @Route("/articles", name="articles_index")
      */
     
-    public function index(ArticleRepository $repo, Request $request)
-        {   
+    public function index(ArticleRepository $repo, CategoryRepository $repocat, Request $request){   
         $articles=$repo->findBy([],['category' => 'desc']);
+        // je récupère les 2 pour la getsion des tabs côté vue...
+        $categories=$repocat->findAll(); 
 
         return $this->render('article/index.html.twig', [
             'controller_name' => 'ArticleController',
-            'articles' => $articles
+            'articles' => $articles,
+            'categories' => $categories
         ]);
     }
 
