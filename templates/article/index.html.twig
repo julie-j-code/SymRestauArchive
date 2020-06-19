@@ -10,26 +10,31 @@
 <legend>Naviguez par catégories...</legend>
 
 {#Onglets de naviagation#}
-<ul class="nav nav-tabs mt-4">
+<ul class="nav nav-tabs mt-5">
+
 {% for category in categories %}
+
   <li class="nav-item">
     <h3 style="font-size: 1rem;" >
-        <a class="nav-link {% if loop.first %}active{% endif %}" data-toggle="tab" href="#{{category.name}}">
+        <a data-toggle="tab" href="#{{category.name}}">
             {{category.name | upper}}
         </a>
     </h3>
   </li>  
+
 {% endfor %}
 </ul>
+
 {#contenu#}
 <div id="myTabContent" class="tab-content">
+
 {% for category in categories %}
-  <div class="tab-pane fade show {% if loop.first %}active {% endif %}" id="{{category.name}}"> 
+  <div class="tab-pane fade {% if loop.first %}show active {% endif %}" id="{{category.name}}"> 
   {% for article in articles %}  
   {% if article.category.name is same as(category.name) %}      
    
         <h4 class="my-4">{{article.title}}</h4>
-        <p>{{article.category.name}}</p>
+        <p>{{article.category.name | upper}}</p>
         <div class="content">
             {{article.content | raw}}
             <div class="alert alert-dismissible alert-warning">Allergènes : {{article.allergen}}</div>
@@ -46,6 +51,7 @@
     {% endfor %}   
    </div>
 {% endfor %}
+
 </div>
 
 </section>
