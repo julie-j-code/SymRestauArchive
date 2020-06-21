@@ -3,21 +3,64 @@
 namespace App\DataFixtures;
 
 use App\Entity\Menu;
+use App\Entity\Role;
+use App\Entity\User;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ArticleFixtures extends Fixture
 {
+    private $encoder;
+    public function __construct(UserPasswordEncoderInterface $encoder){
+    //je stocke l'encoder dans ma propriété $this->encoder dont je pourrai me servir dans toutes les fonctions de ma fixture
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
+
         //j'appelle dans l'espace de nom faker la classe factory qui a une methode static create qui fournit une instance de la classe faker
         $faker=\Faker\Factory::create('fr_FR');
 
-        // Pour générer des catégories simples pour les items (articles) du menu
-    
+        //je fais en sorte que l'entité Roles contienne un role admin indispensable pour tester l'administration
+        $adminRole = new Role();
+        $adminRole->setTitle('ROLE_ADMIN');
+        $manager->persist($adminRole);
+
+        $adminUser = new User();
+        $adminUser->setUsername('jj')
+                  ->setEmail('jj@gmail.com')
+                  ->setPassword($this->encoder->encodePassword($adminUser, 'password'))
+                  ->addUserRole($adminRole);
+
+        $manager->persist($adminUser);
+
+        //ici, nous gérons les utilisateurs
+        $users = [];
+
+        for($i = 1; $i <= 10; $i++){
+            $user = new User();
+
+            $hash = $this->encoder->encodePassword($user, 'password');
+            
+            $user->setUsername($faker->username)
+                 ->setEmail($faker->email)
+                 ->setPassword($hash);
+                 
+        $manager ->persist($user);
+        $users[] = $user;
+
+        }
+
+
+
+
+
+        // Pour générer des catégories simples pour les items (articles) du menu    
        for($h=1; $h<6; $h++){
             $category=new Category();
               $category->setName($faker->word(6));
@@ -47,7 +90,7 @@ class ArticleFixtures extends Fixture
 
                         $article[$j]=new Article();
 
-                        $content='<p>'.join($faker->paragraphs(5), '</p><p>').'</p>';
+                        $content='<p>'.join($faker->paragraphs(2), '</p><p>').'</p>';
 
                         $article[$j]->setTitle($faker->sentence())
                                 ->setContent($content)
