@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs {% endblock %}
+
+{% block body %}
+
+<table class="table">
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Rôles</th>
+        <th>Commentaires</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+{% for user in users %}    
+    <tr>
+        <td>user.id</td>
+        <td>user.email</td>
+        <td>
+        {% for role in user.roles %}
+        {{role}}            
+        {% endfor %}
+        </td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan=5></td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% endblock %}
