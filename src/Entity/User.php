@@ -53,14 +53,10 @@ class User implements UserInterface
     public $confirm_password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users")
+     * @ORM\Column(name="roles", type="array")
      */
-    private $userRoles;
+    private $roles = array();
 
-    public function __construct()
-    {
-        $this->userRoles = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -105,41 +101,21 @@ class User implements UserInterface
 
     public function eraseCredentials(){}
     public function getSalt(){}
-    public function getRoles(){
-        #return ['ROLE_USER'];
-        $roles=$this->userRoles->map(function($roles){
-            return $roles->getTitle();
-        })->toArray();
-
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-        return $roles;
+        return array_unique($roles);
     }
 
-    /**
-     * @return Collection|Role[]
-     */
-    public function getUserRoles(): Collection
-    {
-        return $this->userRoles;
-    }
+    public function setRoles(array $roles)
+{
+    $this->roles = $roles;
 
-    public function addUserRole(Role $userRole): self
-    {
-        if (!$this->userRoles->contains($userRole)) {
-            $this->userRoles[] = $userRole;
-            $userRole->addUser($this);
-        }
+    // allows for chaining
+    return $this;
+}
 
-        return $this;
-    }
 
-    public function removeUserRole(Role $userRole): self
-    {
-        if ($this->userRoles->contains($userRole)) {
-            $this->userRoles->removeElement($userRole);
-            $userRole->removeUser($this);
-        }
-
-        return $this;
-    }
 }

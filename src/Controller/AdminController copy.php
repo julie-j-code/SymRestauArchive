@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Form\EditUserType;
-
 use App\Repository\UserRepository;
+
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,30 +47,15 @@ class AdminController extends AbstractController
      * @Route("/user/edit/{id}", name="user_edit")
      */
 
-/*     public function __toString()
-    {
-        return $this->user_role;
-    } */
-
-
-
     public function useredit (User $user, Request $request, ObjectManager $manager){
-
-
-
-        
 
 
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
-        
-
 
         if($form->isSubmitted() && $form->isValid()) {
- 
-
             $manager->persist($user);
-            $manager->flush();
+            $manager->flush;
 
             $this->addFlash("message", "l'utilisateur a bien été modifié");
             return $this->redirectToRoute("admin_users");

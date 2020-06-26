@@ -68,7 +68,6 @@ class Article
     {
         $this->comments = new ArrayCollection();
         $this->menu = new ArrayCollection();
-
     }
 
    
@@ -117,7 +116,6 @@ class Article
             $this->comments[] = $comment;
             $comment->setArticle($this);
         }
-
         return $this;
     }
 
@@ -208,10 +206,6 @@ class Article
 
         return $this;
     }
-
-
-
-
 
 
 

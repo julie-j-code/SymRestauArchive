@@ -10,26 +10,24 @@
         <th>ID</th>
         <th>Email</th>
         <th>Rôles</th>
-        <th>Commentaires</th>
         <th>Actions</th>
     </tr>
 </thead>
 <tbody>
 {% for user in users %}    
     <tr>
-        <td>user.id</td>
-        <td>user.email</td>
+        <td>{{user.id}}</td>
+        <td>{{user.email}}</td>
         <td>
         {% for role in user.roles %}
         {{role}}            
         {% endfor %}
         </td>
-        <td></td>
-        <td></td>
+        <td><a class="btn btn-danger" href="{{ path('admin_user_edit', {'id': user.id}) }}">Modifier l'utilisateur</a></td>
     </tr>
     {% else %}
     <tr>
-        <td colspan=5></td>
+        <td colspan=5>Aucun utilisateur inscrit</td>
     </tr>
 {% endfor %}
 </tbody>
