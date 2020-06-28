@@ -3,11 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\Menu;
-use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\Category;
+use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -26,18 +26,27 @@ class ArticleFixtures extends Fixture
         //j'appelle dans l'espace de nom faker la classe factory qui a une methode static create qui fournit une instance de la classe faker
         $faker=\Faker\Factory::create('fr_FR');
 
-        //je fais en sorte que l'entité Roles contienne un role admin indispensable pour tester l'administration
-        $adminRole = new Role();
+        //je faisais antérieurement en sorte que l'entité Roles contienne un role admin indispensable pour tester l'administration
+/*      $adminRole = new Role();
         $adminRole->setTitle('ROLE_ADMIN');
-        $manager->persist($adminRole);
+        $manager->persist($adminRole); */
 
-        $adminUser = new User();
+
+        $admin = new User();
+        $admin->setUsername('julie');
+        $admin->setEmail('jj@gmail.com');
+        $admin->setPassword($this->encoder->encodePassword($admin, 'password'));
+        $admin->setRoles(array('ROLE_ADMIN'));
+        $manager->persist($admin);
+
+
+/*      $adminUser = new User();
         $adminUser->setUsername('jj')
                   ->setEmail('jj@gmail.com')
                   ->setPassword($this->encoder->encodePassword($adminUser, 'password'))
                   ->addUserRole($adminRole);
 
-        $manager->persist($adminUser);
+        $manager->persist($adminUser); */
 
         //ici, nous gérons les utilisateurs
         $users = [];
@@ -53,6 +62,7 @@ class ArticleFixtures extends Fixture
                  
         $manager ->persist($user);
         $users[] = $user;
+        
 
         }
 
@@ -115,12 +125,17 @@ class ArticleFixtures extends Fixture
                         for ($k=1; $k<= mt_rand(4,10); $k++){
                             $comment=new Comment();
                             $content='<p>'.join($faker->paragraphs(5), '</p><p>').'</p>';
+                            
+                            
                             $now=new\ DateTime();
                             $interval=$now->diff($article[$j]->getCreatedAt());
                             $days=$interval->days;
                             $min='-'.$days.'days';
+                            // on récupère aléatoirement l'id d'un utilisateur pour en faire l'auteur d'un commentaire !
+                            $randomuser = array_rand($users);
+                            $randomUserName = $users[$randomuser];
 
-                            $comment->setAuthor($faker->name())
+                            $comment->setAuthor($randomUserName->getUsername())
                                     ->setContent($content)
                                     ->setCreatedAt($faker->dateTimeBetween($min))
                                     ->setArticle($article[$j]);

@@ -46,6 +46,15 @@
                 <a href="{{ path('article_delete', {'id':article.id })}}" class="card-link">Supprimer</a>
         </div>    
             {% endif %}
+                    {#pour affichage des commentaires#}
+        {% if article.comments %}        
+        <div>
+          <a class="btn btn-dark btn-sm mt-4" href="{{ path('article_show', {'id':article.id} ) }} ">
+            {{article.comments| length}} commentaires <i class="fa fa-book" aria-hidden="true"></i>
+          </a>
+          
+        </div>
+        {% endif %}
 
     {% endif %}   
     {% endfor %}   

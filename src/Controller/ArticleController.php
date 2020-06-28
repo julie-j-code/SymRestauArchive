@@ -71,17 +71,25 @@ class ArticleController extends AbstractController
     /**
      * Route de redirection après création ou modification du plat
      * @Route("/article/{id}", name="article_show")
+     * @param Article $article
+     * @param Request $request
+     * @return Response 
      */
 
-    public function show(ArticleRepository $repo, $id, Request $request, ObjectManager $manager)
+    public function show(Article $article, Request $request, ObjectManager $manager)
     {
-        $article=$repo->find($id);
+        // $article=$repo->find($id);
         $comment=new Comment();
+        
         $form=$this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            // pour récupérer le nom d'utilisateur actuellement authentifié
+            // en faire l'auteur du commentaire
+            $user = $this->getUser()->getUsername();
             $comment->setCreatedAt(new \DateTime())
-                    ->setArticle($article);
+                    ->setArticle($article)
+                    ->setAuthor($user);
             $manager->persist($comment);
             $manager->flush();
             return $this->redirectToRoute('article_show',['id'=> $article->getId()]);

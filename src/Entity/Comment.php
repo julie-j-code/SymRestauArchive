@@ -37,6 +37,7 @@ class Comment
      */
     private $article;
 
+ 
     public function getId(): ?int
     {
         return $this->id;
@@ -89,4 +90,5 @@ class Comment
 
         return $this;
     }
+
 }

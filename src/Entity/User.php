@@ -53,7 +53,7 @@ class User implements UserInterface
     public $confirm_password;
 
     /**
-     * @ORM\Column(name="roles", type="array")
+     * @ORM\Column(name="roles", type="json_array")
      */
     private $roles = array();
 
@@ -101,11 +101,11 @@ class User implements UserInterface
 
     public function eraseCredentials(){}
     public function getSalt(){}
-    public function getRoles(): array
+    public function getRoles()
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+    
         return array_unique($roles);
     }
 
