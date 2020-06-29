@@ -45,8 +45,7 @@ class AdminUsersController extends AbstractController
      * @Route("/user/edit/{id}", name="user_edit")
      */
 
-    public function useredit (User $user, Request $request, ObjectManager $manager){        
-
+    public function useredit (User $user, Request $request, ObjectManager $manager){      
 
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);    
@@ -64,6 +63,26 @@ class AdminUsersController extends AbstractController
            'formUser' => $form->createView()
         ]);
     }
+
+    /**
+     * Suppression d'un utilisateur
+     * @Route("/user/delete/{id}", name="user_delete")
+     * @return Response
+     */
+
+     public function delete(User $user, ObjectManager $manager){
+        $manager->remove($user);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "L'utilisateur a bien été supprimé"
+        );
+
+        return $this->redirectToRoute('admin_users');
+
+
+     }
 
 
 }

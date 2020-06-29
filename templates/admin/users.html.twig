@@ -23,7 +23,10 @@
         {{role}}            
         {% endfor %}
         </td>
-        <td><a class="btn btn-danger" href="{{ path('admin_user_edit', {'id': user.id}) }}">Modifier l'utilisateur</a></td>
+        <td>
+            <a class="btn btn-danger" href="{{ path('admin_user_edit', {'id': user.id}) }}">Modifier l'utilisateur</a>
+            <a href="{{ path('admin_user_delete', {'id': user.id}) }}" class="btn btn-danger"> X </a>
+        </td>
     </tr>
     {% else %}
     <tr>
