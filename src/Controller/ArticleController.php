@@ -115,7 +115,7 @@ class ArticleController extends AbstractController
              "Le plat a bien été supprimé de la carte"
          );
 
-         return $this->redirectToRoute("articles_index");
+         return $this->redirectToRoute('articles_index');
 
      }
 

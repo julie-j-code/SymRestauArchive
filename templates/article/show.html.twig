@@ -1,40 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<h2 class="mt-4">Article à la Carte <span class="text-muted"> id {{article.id | lower}}</span></h1>
+<hr>
+<legend>Dans la catégorie <span class="text-small text-muted"> {{article.category.name | upper}}...</span></legend>
+
 <article>
-    <h2 class="mt-4">{{ article.title }}</h2>
-    <div class="metadata">article écrit le {{article.createdAt | date ('d,m,Y')}} à {{article.createdAt | date ('H:i')}} dans la catégorie {{article.category.name}}</div>
-    <div class="content">
+    <h3 class="mt-4">{{ article.title }}</h3>
+    <hr>
+    <p class="text-muted">Ajouté le {{article.createdAt | date ('d,m,Y')}}</p>
+    <div class="content my-4">
         {{article.content | raw}}
     </div>
 </article>
 
 
 <section id="commentaires">
-    <h1>{{ article.comments | length }} Commentaires</h1>
-    {% for comment in article.comments %}
-        <div class="comment">
-            <div class="row">
-                <div class="col-3">
-                    {{comment.author}}(<small>{{comment.createdAt | date('d/m/Y à H:i')}}</small>)
-                </div>
-                <div class="col">
-                    {{comment.content | raw}}
-                </div>
-            </div>
-        </div>
+    <h4 class="mt-5">{{ article.comments | length }} Commentaires <i class="fa fa-comments" aria-hidden="true"></i></h4>
+    {% for comment in article.comments %}    
+        <blockquote class="blockquote my-4">
+            <div><small> {{comment.content | raw}}</small></div>
+            <footer class="blockquote-footer">
+                {{comment.author}}<cite title="Source Title">(<small>{{comment.createdAt | date('d/m/Y à H:i')}}</cite> )
+            </footer>
+        </blockquote>
+        <hr>
     {% endfor %} 
-
-    {% if app.user %}
-    {{ form_start(commentForm) }}
-    {{ form_row(commentForm.author)}}
-    {{ form_row(commentForm.content)}}
-    <button type="submit" class="btn btn-success">Commenter</button>
-    {{ form_end(commentForm) }}
-    {% else %}
-    <h2>Vous devez vous identifier pour poster un commentaire</h2>
-    <a href="{{ path('security_login')}}" class="btn btn-primary">Connexion</a>
-    {% endif %}
+    <div class="alert alert-warning">
+         <h4 class="alert-heading">Ajoutez un commentaire!</h4>
+            {% if app.user %}
+            {{ form_start(commentForm) }}
+            {{ form_row(commentForm.content)}}
+            <button type="submit" class="btn btn-success">Commenter</button>
+            {{ form_end(commentForm) }}
+            {% else %}
+            <h2>Vous devez vous identifier pour poster un commentaire</h2>
+            <a href="{{ path('security_login')}}" class="btn btn-primary">Connexion</a>
+            {% endif %}
+    </div>
 
 </section>
 {% endblock %}

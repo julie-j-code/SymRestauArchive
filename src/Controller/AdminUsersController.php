@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Form\EditUserType;
-
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -17,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * @Route("/admin", name="admin_")
  */
 
-class AdminController extends AbstractController
+class AdminUsersController extends AbstractController
 {
     /**
      * @Route("/", name="index")
@@ -25,7 +23,7 @@ class AdminController extends AbstractController
     public function index()
     {
         return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
+            'controller_name' => 'AdminUsersController',
         ]);
     }
 
@@ -37,10 +35,9 @@ class AdminController extends AbstractController
     public function userslist(UserRepository $repo){
         $users = $repo->findAll();
         return $this->render('admin/users.html.twig', [
-            'controller_name' => 'AdminController',
+            'controller_name' => 'AdminUsersController',
             'users' => $users
         ]);
-
     }
 
     /**
@@ -48,27 +45,13 @@ class AdminController extends AbstractController
      * @Route("/user/edit/{id}", name="user_edit")
      */
 
-/*     public function __toString()
-    {
-        return $this->user_role;
-    } */
-
-
-
-    public function useredit (User $user, Request $request, ObjectManager $manager){
-
-
-
-        
+    public function useredit (User $user, Request $request, ObjectManager $manager){        
 
 
         $form = $this->createForm(EditUserType::class, $user);
-        $form->handleRequest($request);
-        
-
+        $form->handleRequest($request);    
 
         if($form->isSubmitted() && $form->isValid()) {
- 
 
             $manager->persist($user);
             $manager->flush();
@@ -78,7 +61,7 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/edituser.html.twig',[
-           'userForm' => $form->createView()
+           'formUser' => $form->createView()
         ]);
     }
 

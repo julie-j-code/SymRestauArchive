@@ -12,7 +12,7 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('author')
+            // ->add('author') automatiquement généré en récupérant l'utilisateur actif
             ->add('content')
             //->add('createdAt') automatiquement crées
             //->add('article') automatiquement crées

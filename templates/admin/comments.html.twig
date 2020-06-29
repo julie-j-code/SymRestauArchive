@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commentaires {% endblock %}
+
+{% block body %}
+
+<table class="table">
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Article</th>
+        <th>Contenu</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+<tbody>
+{% for comment in comments %}    
+    <tr>
+        <td>{{comment.id}}</td>
+        <td>{{comment.id}}</td>
+        <td>{{comment.content}}</td>
+        <td><a class="btn btn-danger" href="{{ path('admin_comment_edit', {'id':comment.id}) }}">Modifier le commentaire</a></td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan=5>Aucun commentaire pour le moment...</td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% endblock %}
