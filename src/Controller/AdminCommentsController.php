@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Form\CommentType;
+// use Doctrine\ORM\Query\Expr\Select;
+use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
+// use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,15 +26,32 @@ class AdminCommentsController extends AbstractController
      * @Route("/comments", name="comments")
      * @Security("has_role('ROLE_ADMIN')")      
      */
-    public function commentslist(CommentRepository $repo, Request $request){
-        $comments = $repo->findAll();
+
+     // Dans cette version j'ai rajouté ArticleRpository pour pouvoir boucler 
+     // sur articles et comments respectivement dans div.card-header et div.collapse du div.accordion 
+     // tests opérationnels !!!!
+    
+     public function commentslist(CommentRepository $repo, ArticleRepository $articles, Request $request){
+        $comments = $repo->findBy([],['article' => 'desc']);
+        $articles = $articles->findAll();
+        return $this->render('admin/commentbyarticle.html.twig', [
+            'controller_name' => 'AdminCommentsController',
+            'comments' => $comments,
+            'articles' => $articles
+        ]);
+
+    }
+
+/*     public function index(EntityManagerInterface $manager)
+    {
+        $comments = $manager->createQuery('SELECT c FROM App\Entity\Comment c GROUP BY c.article')->getResult();
         return $this->render('admin/comments.html.twig', [
             'controller_name' => 'AdminCommentsController',
             'comments' => $comments
 
         ]);
 
-    }
+    } */
 
 
 

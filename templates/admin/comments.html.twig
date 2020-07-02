@@ -17,7 +17,7 @@
 {% for comment in comments %}    
     <tr>
         <td>{{comment.id}}</td>
-        <td>{{comment.id}}</td>
+        <td>{{comment.article.id}}</td>
         <td>{{comment.content}}</td>
         <td><a class="btn btn-danger" href="{{ path('admin_comment_edit', {'id':comment.id}) }}">Modifier le commentaire</a></td>
     </tr>

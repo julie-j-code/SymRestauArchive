@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commentaires {% endblock %}
+
+{% block body %}
+
+<h2 class="mt-4">Liste des commentaires par articles à la carte</h2>
+<hr>
+<legend>Consulter / Modifier les commentaires par éléments articles</legend>
+
+
+<div class="accordion" id="accordionExample">
+{% for article in articles %} 
+
+ {# {{ dump(article.comments) }} #}
+
+  <div class="card">
+    <div class="card-header" id="heading{{loop.index0}}">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{loop.index0}}" aria-expanded="true" aria-controls="collapse{{loop.index0}}">
+          Article {{article.id}} : {{article.title}}
+        </button>
+      </h2>
+    </div>
+
+
+    <div id="collapse{{loop.index0}}" class="collapse {% if loop.first %}show {% endif %}" aria-labelledby="heading{{loop.index0}}" data-parent="#accordionExample">
+      <div class="card-body">
+      {% for comment in article.comments %} 
+      <div class="row">
+        <div class="col col-md-1 text-center">
+            <span class="badge badge-info">{{comment.id}}</span>
+        </div>
+        <div class="col col-md-10">
+            {{comment.content | raw}}
+            <a class="btn btn-danger mb-5 d-block" href="{{ path('admin_comment_edit', {'id':comment.id}) }}">Modifier le commentaire</a>
+        </div>
+      </div>
+    {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+    {% endfor %}
+
+</div>
+
+{% endblock %}
