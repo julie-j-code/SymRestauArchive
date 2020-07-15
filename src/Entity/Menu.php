@@ -128,7 +128,6 @@ class Menu
     public function getArticles(): Collection
     {
         return $this->articles;
-
     }
 
     public function addArticle(Article $article): self
