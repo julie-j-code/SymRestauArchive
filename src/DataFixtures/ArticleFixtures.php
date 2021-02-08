@@ -34,7 +34,7 @@ class ArticleFixtures extends Fixture
 
         $admin = new User();
         $admin->setUsername('julie');
-        $admin->setEmail('jj@gmail.com');
+        $admin->setEmail('jeanne.julie@gmail.com');
         $admin->setPassword($this->encoder->encodePassword($admin, 'password'));
         $admin->setRoles(array('ROLE_ADMIN'));
         $manager->persist($admin);
@@ -84,7 +84,8 @@ class ArticleFixtures extends Fixture
 
             $menu[$i]=new Menu();
             $menu[$i]->setTitle($faker->sentence())
-                ->setImage($faker->imageUrl())
+                ->setImage("https://picsum.photos/500/430?random=" . mt_rand(1, 55000))
+                // ->setImage($faker->imageUrl())
                 ->setCreatedAt($faker->dateTimeBetween('-6 months'))
                 ->setEndDate($faker->DateTime('2021-05-29 22:30:48', 'Europe/Paris'))
                 ->setPrice($faker->randomFloat($nbMaxDecimals = NULL, $min = 30, $max = 90));
